@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,16 +7,33 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Rigidbody _rb;
 
-    Vector3 _moveDirection = Vector3.zero;
+    Vector3 _moveDirection;
+
+    PlayerInputActions _inputActions;
+
+    Vector2 _moveInput;
 
     public Vector3 CurrentVelocity { get; private set; }
 
+    private void Awake()
+    {
+        _inputActions = new PlayerInputActions();
+        _inputActions.Player.Fire.performed += OnFire;
+    }
+
+    private void OnEnable()
+    {
+        _inputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Disable();
+    }
+
     private void Update()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
-
-        _moveDirection = new Vector3(x, 0f, z).normalized;
+        _moveInput = _inputActions.Player.Move.ReadValue<Vector2>();
     }
 
     private void FixedUpdate()
@@ -32,15 +49,20 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(_moveDirection == Vector3.zero)
+        if(_moveInput == Vector2.zero)
         {
             _rb.linearVelocity = new Vector3(0f, _rb.linearVelocity.y, 0f);
             CurrentVelocity = Vector3.zero;
             return;
         }
 
-        Vector3 targetVelocity = _moveDirection * MOVE_SPEED;
+        Vector3 targetVelocity = new Vector3(_moveInput.x, _rb.linearVelocity.y, _moveInput.y) * MOVE_SPEED;
 
         _rb.linearVelocity = new Vector3(targetVelocity.x, _rb.linearVelocity.y, targetVelocity.z);
+    }
+
+    private void OnFire(InputAction.CallbackContext context)
+    {
+        Debug.Log("撃った！");
     }
 }
