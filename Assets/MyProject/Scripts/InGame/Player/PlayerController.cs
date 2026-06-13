@@ -8,7 +8,7 @@ namespace TPSRoguelite.InGame.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        const float MOVE_SPEED = 5f;
+        const float MOVE_SPEED = 8f;
 
         const float ROTATE_SPEED = 10f;
 
