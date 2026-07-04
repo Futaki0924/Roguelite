@@ -1,5 +1,5 @@
 ﻿using Core.Interface;
-using InGame.Data;
+using TPSRoguelite.InGame.Data;
 using UnityEngine;
 using UnityEngine.Events;
 

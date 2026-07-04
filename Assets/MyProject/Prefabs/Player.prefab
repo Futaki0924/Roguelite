@@ -159,6 +159,7 @@ MonoBehaviour:
   _rb: {fileID: 6018824446406683529}
   _weaponOrigin: {fileID: 4840366651610220074}
   _laserLineRendrer: {fileID: 626308654508030565}
+  _currentWeapon: {fileID: 11400000, guid: f5cb87309b6825a48a1016b2e50a006f, type: 2}
 --- !u!1 &3244733176033089896
 GameObject:
   m_ObjectHideFlags: 0

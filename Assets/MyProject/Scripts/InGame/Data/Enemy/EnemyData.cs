@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace InGame.Data
+namespace TPSRoguelite.InGame.Data
 {
     [CreateAssetMenu(fileName = "EnemyData", menuName = "Scriptable Objects/EnemyData")]
     public class EnemyData : ScriptableObject
