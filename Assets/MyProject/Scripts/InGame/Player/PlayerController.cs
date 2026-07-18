@@ -27,6 +27,8 @@ namespace TPSRoguelite.InGame.Player
 
         [SerializeField] ulong _weaponId = 1;
 
+        [SerializeField] ParticleSystem _muzzleFlash;
+
         WeaponDataRecord _currentWeapon;
 
         Vector3 _moveDirection;
@@ -255,6 +257,11 @@ namespace TPSRoguelite.InGame.Player
 
         private void Shoot()
         {
+            if(_muzzleFlash != null)
+            {
+                _muzzleFlash.Play();
+            }
+
             Ray ray = new Ray(_mainCameraTransform.position, _mainCameraTransform.forward);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, ATTACK_RANGE))
