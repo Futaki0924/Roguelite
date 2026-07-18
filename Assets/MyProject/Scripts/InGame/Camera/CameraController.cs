@@ -4,15 +4,16 @@ namespace TPSRoguelite.InGame.Camera
 {
     public class CameraController : MonoBehaviour
     {
-        const float LOOK_SENSITIVITY = 0.2f;
+        [Header("カメラの基本設定")]
+        [SerializeField] float _lookSensitivity = 0.2f;
+        [SerializeField] float _minPitch = -10f;
+        [SerializeField] float _maxPitch = 60f;
+        [SerializeField] float _zoomSpeed = 5f;
 
-        const float DISTANCE = 5f;
-
-        const float HEIGHT_OFFSET = 1.5f;
-
-        const float MIN_PITCH = -10f;
-
-        const float MAX_PITCH = 60f;
+        [Header("カメラの視点")]
+        [SerializeField] float _targetDistance = -5f;
+        [SerializeField] float _targetHeightOffset = 1.2f;
+        [SerializeField] float _targetShoulderOffset = 0.8f;
 
         [SerializeField] Transform _target;
 
@@ -23,6 +24,12 @@ namespace TPSRoguelite.InGame.Camera
         float _currentYaw;
 
         float _currentPitch = 20f;
+
+        float _currentDistance;
+
+        float _currentHeightOffset;
+
+        float _currentShoulderOffset;
 
         private void Awake()
         {
@@ -45,10 +52,10 @@ namespace TPSRoguelite.InGame.Camera
         {
             _lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
 
-            _currentYaw += _lookInput.x * LOOK_SENSITIVITY;
-            _currentPitch -= _lookInput.y * LOOK_SENSITIVITY;
+            _currentYaw += _lookInput.x * _lookSensitivity;
+            _currentPitch -= _lookInput.y * _lookSensitivity;
 
-            _currentPitch = Mathf.Clamp(_currentPitch, MIN_PITCH, MAX_PITCH);
+            _currentPitch = Mathf.Clamp(_currentPitch, _minPitch, _maxPitch);
         }
 
         private void LateUpdate()
@@ -58,11 +65,17 @@ namespace TPSRoguelite.InGame.Camera
                 return;
             }
 
-            Vector3 targetPosition = _target.position + Vector3.up * HEIGHT_OFFSET;
+            _currentDistance = Mathf.Lerp(_currentDistance, _targetDistance, _zoomSpeed * Time.deltaTime);
+            _currentHeightOffset = Mathf.Lerp(_currentHeightOffset, _targetHeightOffset, _zoomSpeed * Time.deltaTime);
+            _currentShoulderOffset = Mathf.Lerp(_currentShoulderOffset, _targetShoulderOffset, _zoomSpeed * Time.deltaTime);
 
             Quaternion rotate = Quaternion.Euler(_currentPitch, _currentYaw, 0f);
 
-            Vector3 cameraPosition = targetPosition - (rotate * Vector3.forward * DISTANCE);
+            Vector3 basePosition = _target.position + Vector3.up * _currentHeightOffset;
+
+            Vector3 shoulderPosition = basePosition + rotate * Vector3.right * _currentShoulderOffset;
+
+            Vector3 cameraPosition = shoulderPosition + rotate * Vector3.forward * _currentDistance;
 
             transform.position = cameraPosition;
             transform.rotation = rotate;

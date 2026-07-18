@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using System.Threading;
 using System.Collections.Generic;
 using TPSRoguelite.InGame.Enemy;
+using Core.MasterData;
 
 namespace TPSRoguelite.InGame.Spawner
 {
@@ -19,27 +20,26 @@ namespace TPSRoguelite.InGame.Spawner
 
         private Queue<EnemyState> _enemyPool = new Queue<EnemyState>();
 
-        private void Awake()
+        public void SetUp()
         {
-            if(_enemyPrefab == null)
+            if (_enemyPrefab == null)
             {
                 return;
             }
 
-            for(int i = 0; i < POOL_SIZE; i++)
+            for (int i = 0; i < POOL_SIZE; i++)
             {
                 GameObject enemyObj = Instantiate(_enemyPrefab);
                 EnemyState enemy = enemyObj.GetComponent<EnemyState>();
-                if(enemy != null)
+                if (enemy != null)
                 {
+                    ulong randomId = (ulong)Random.Range(1, MasterDataAccessor.Instance.Count<EnemyDataRecord>());
+                    enemy.Initialize(randomId);
                     enemy.gameObject.SetActive(false);
                     _enemyPool.Enqueue(enemy);
                 }
             }
-        }
 
-        private void Start()
-        {
             SpawnLoopAsync().Forget();
         }
 
@@ -99,7 +99,7 @@ namespace TPSRoguelite.InGame.Spawner
             enemy.transform.position = safePosition;
             enemy.transform.rotation = spawnPoint.rotation;
 
-            enemy.gameObject.SetActive(true);
+            enemy.SetUp();
         }
 
         private void ReturnToPool(EnemyState enemy)

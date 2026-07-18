@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ad5342e856bf4439c9ba1b21f9f695, type: 3}
   m_Name: AK47
   m_EditorClassIdentifier: Assembly-CSharp::TPSRoguelite.InGame.Data.WeaponData
-  <WeaponName>k__BackingField: 
-  <WeaponFireType>k__BackingField: 0
-  <AttackPower>k__BackingField: 0
-  <FireInterval>k__BackingField: 0
-  <FireRate>k__BackingField: 0
-  <MaxAmmo>k__BackingField: 0
-  <ReloadTime>k__BackingField: 0
+  <WeaponName>k__BackingField: AK47
+  <WeaponFireType>k__BackingField: 2
+  <AttackPower>k__BackingField: 20
+  <FireInterval>k__BackingField: 0.1
+  <FireRate>k__BackingField: 0.1
+  <MaxAmmo>k__BackingField: 30
+  <ReloadTime>k__BackingField: 2

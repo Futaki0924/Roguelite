@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: 988a617d28e476d43a8f42ab61683ffc
+  m_SerializeEntries:
+  - m_GUID: 163bc105cc116de42855b77d35d7025c
+    m_Address: EnemyData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemyData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ac1ca7bc63f1ea44a8d8c050696a8a8
+    m_Address: WeaponData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - WeaponData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 337fe4d62cd438e4da3c0c20da8221d2
+    m_Address: Assets/Data/CSV/WeaponData.csv
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 545a75e6bf939a84dbf64f9b7d1f7006
+    m_Address: Assets/Data/CSV/EnemyData.csv
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d0ecebd0d6a7f0f4cbc531fcd71266dd, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: df01d8a64ba4bf746b5e1f47366b9725, type: 2}
+    - {fileID: 11400000, guid: c63a185a35d2f93459f97b5267ad7b3a, type: 2}

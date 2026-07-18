@@ -16,7 +16,7 @@ namespace TPSRoguelite.InGame.Enemy
         private void Awake()
         {
             GameObject player = GameObject.FindGameObjectWithTag(PLAYER_TAG_NAME);
-            if(player != null)
+            if (player != null)
             {
                 _targetPlayer = player.transform;
             }
@@ -25,7 +25,7 @@ namespace TPSRoguelite.InGame.Enemy
                 Debug.LogError($"{PLAYER_TAG_NAME}というタグのついたオブジェクトが見つかりませんでした");
             }
 
-            if(_navMeshAgent != null && _enemyState != null && _enemyState.EnemyDataAsset != null)
+            if (_navMeshAgent != null && _enemyState != null && _enemyState.EnemyDataAsset != null)
             {
                 _navMeshAgent.speed = _enemyState.EnemyDataAsset.MoveSpeed;
             }
@@ -33,7 +33,7 @@ namespace TPSRoguelite.InGame.Enemy
 
         private void Update()
         {
-            if(_targetPlayer != null && _navMeshAgent != null)
+            if (_targetPlayer != null && _navMeshAgent != null)
             {
                 _navMeshAgent.SetDestination(_targetPlayer.position);
             }

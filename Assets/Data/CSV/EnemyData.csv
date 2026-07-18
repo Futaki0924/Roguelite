@@ -1,0 +1,4 @@
+Id,EnemyName,MaxHP,MoveSpeed
+1,Slime,20,30
+2,Goblin,50,50
+3,Zombie,100,20

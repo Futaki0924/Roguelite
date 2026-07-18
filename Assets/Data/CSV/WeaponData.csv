@@ -1,0 +1,4 @@
+Id,WeaponName,WeaponFireType,AttackPower,FireInterval,FireRate,MaxAmmo,ReloadTime
+1,P2020,0,24,0,0.1,15,2
+2,G7,1,37,0.1,0.05,18,3
+3,Flatline,2,20,0.15,0.05,19,2.5

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63238a32fa37f2b42a7049affd17e68a, type: 3}
   m_Name: PureVessel
   m_EditorClassIdentifier: Assembly-CSharp::TPSRoguelite.InGame.Data.EnemyData
-  <EnemyName>k__BackingField: 
-  <MaxHP>k__BackingField: 0
-  <MoveSpeed>k__BackingField: 0
+  <EnemyName>k__BackingField: PureVessel
+  <MaxHP>k__BackingField: 500
+  <MoveSpeed>k__BackingField: 5

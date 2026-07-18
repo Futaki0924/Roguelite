@@ -3,8 +3,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System;
-using TPSRoguelite.InGame.Data;
 using System.Threading;
+using Core.MasterData;
+using TPSRoguelite.InGame.Enum;
 
 namespace TPSRoguelite.InGame.Player
 {
@@ -24,7 +25,9 @@ namespace TPSRoguelite.InGame.Player
 
         [SerializeField] LineRenderer _laserLineRendrer;
 
-        [SerializeField] WeaponData _currentWeapon;
+        [SerializeField] ulong _weaponId = 1;
+
+        WeaponDataRecord _currentWeapon;
 
         Vector3 _moveDirection;
 
@@ -46,6 +49,13 @@ namespace TPSRoguelite.InGame.Player
 
         private void Awake()
         {
+            gameObject.SetActive(false);
+        }
+
+        public void SetUp()
+        {
+            _currentWeapon = MasterDataAccessor.Instance.GetById<WeaponDataRecord>(_weaponId);
+
             if (_currentWeapon != null)
             {
                 CurrentAmmo = _currentWeapon.MaxAmmo;
@@ -61,7 +71,7 @@ namespace TPSRoguelite.InGame.Player
             _inputActions.Player.Fire.canceled += OnFire;
             _inputActions.Player.Reload.performed += OnReload;
 
-            if(UnityEngine.Camera.main != null)
+            if (UnityEngine.Camera.main != null)
             {
                 _mainCameraTransform = UnityEngine.Camera.main.transform;
             }
@@ -69,16 +79,18 @@ namespace TPSRoguelite.InGame.Player
             {
                 Debug.LogError("Main Cameraが見つかりませんでした");
             }
+
+            gameObject.SetActive(true);
         }
 
         private void OnEnable()
         {
-            _inputActions.Enable();
+            _inputActions?.Enable();
         }
 
         private void OnDisable()
         {
-            _inputActions.Disable();
+            _inputActions?.Disable();
         }
 
         private void Update()
@@ -95,10 +107,20 @@ namespace TPSRoguelite.InGame.Player
 
         private void OnMove()
         {
-            if (_rb == null)
+            if (_rb == null  || _mainCameraTransform == null)
             {
                 Debug.LogError("Rigidbodyがないよ！！");
                 return;
+            }
+
+            Vector3 cameraForward = _mainCameraTransform.forward;
+            cameraForward.y = 0f;
+            cameraForward.Normalize();
+
+            if(cameraForward != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+                _rb.rotation = Quaternion.Slerp(_rb.rotation, targetRotation, ROTATE_SPEED * Time.fixedDeltaTime);
             }
 
             if (_moveInput == Vector2.zero)
@@ -108,18 +130,12 @@ namespace TPSRoguelite.InGame.Player
                 return;
             }
 
-            Vector3 cameraForward = _mainCameraTransform.forward;
             Vector3 cameraRight = _mainCameraTransform.right;
 
-            cameraForward.y = 0f;
             cameraRight.y = 0f;
-            cameraForward.Normalize();
             cameraRight.Normalize();
 
             Vector3 moveDirection = (cameraForward * _moveInput.y + cameraRight * _moveInput.x).normalized;
-
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            _rb.rotation = Quaternion.Slerp(_rb.rotation, targetRotation, ROTATE_SPEED * Time.deltaTime);
 
             Vector3 targetVelocity = moveDirection * MOVE_SPEED;
             _rb.linearVelocity = new Vector3(targetVelocity.x, _rb.linearVelocity.y, targetVelocity.z);
@@ -140,15 +156,15 @@ namespace TPSRoguelite.InGame.Player
                 CancellationTokenSource linkedCts =
                     CancellationTokenSource.CreateLinkedTokenSource(_fireCts.Token, this.GetCancellationTokenOnDestroy());
 
-                switch (_currentWeapon.WeaponFireType)
+                switch ((FireType)_currentWeapon.WeaponFireType)
                 {
-                    case Enum.FireType.SemiAuto:
+                    case FireType.SemiAuto:
                         ShootSemiAutoAsync(this.GetCancellationTokenOnDestroy()).Forget();
                         break;
-                    case Enum.FireType.Burst:
+                    case FireType.Burst:
                         ShootBurstAsync(this.GetCancellationTokenOnDestroy()).Forget();
                         break;
-                    case Enum.FireType.FullAuto:
+                    case FireType.FullAuto:
                         ShootFullAutoAsync(linkedCts.Token).Forget();
                         break;
                     default:
