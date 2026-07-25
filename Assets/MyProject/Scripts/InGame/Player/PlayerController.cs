@@ -40,6 +40,12 @@ namespace TPSRoguelite.InGame.Player
 
         [SerializeField] Image _reloadCircleImage;
 
+        [SerializeField] Slider _expBar;
+
+        [SerializeField] TextMeshProUGUI _levelUpText;
+
+        [SerializeField] ParticleSystem _levelUpEffect;
+
         WeaponDataRecord _currentWeapon;
 
         Vector3 _moveDirection;
@@ -59,6 +65,12 @@ namespace TPSRoguelite.InGame.Player
         public Vector3 CurrentVelocity { get; private set; }
 
         public int CurrentAmmo { get; private set; }
+
+        public int CurrentExp { get; private set; }
+
+        public int CurrentLevel { get; private set; }
+
+        int RequiredExp => CurrentLevel * 5;
 
         private void Awake()
         {
@@ -98,6 +110,16 @@ namespace TPSRoguelite.InGame.Player
             {
                 _reloadUI.SetActive(false);
             }
+
+            CurrentExp = 0;
+            CurrentLevel = 1;
+
+            if(_levelUpText != null)
+            {
+                _levelUpText.enabled = false;
+            }
+
+            UpdateExpUI();
 
             gameObject.SetActive(true);
         }
@@ -392,6 +414,21 @@ namespace TPSRoguelite.InGame.Player
             CurrentAmmo = _currentWeapon.MaxAmmo;
             UpdateCurrentAmmoUI();
             _isReloading = false;
+        }
+
+        public void AddExp(int amount)
+        {
+            CurrentExp += amount;
+
+            UpdateExpUI();
+        }
+
+        private void UpdateExpUI()
+        {
+            if(_expBar != null)
+            {
+                _expBar.value = (float)CurrentExp / RequiredExp;
+            }
         }
     }
 }
