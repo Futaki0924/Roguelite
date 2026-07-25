@@ -791,6 +791,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c352f286a7f134f92a254822a71802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TPSRoguelite.InGame.Camera.CameraController
+  _lookSensitivity: 0.2
+  _minPitch: -10
+  _maxPitch: 60
+  _zoomSpeed: 5
+  _targetDistance: -5
+  _targetHeightOffset: 1.2
+  _targetShoulderOffset: 0.8
   _target: {fileID: 929195011}
 --- !u!1 &1462613136
 GameObject:
@@ -1300,7 +1307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4900508931005353822, guid: 90c75e90897c5604c87f5b0621464bf0, type: 3}
       propertyPath: _weaponId
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

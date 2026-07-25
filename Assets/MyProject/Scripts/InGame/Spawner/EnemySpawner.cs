@@ -10,7 +10,7 @@ namespace TPSRoguelite.InGame.Spawner
 {
     public class EnemySpawner : MonoBehaviour
     {
-        const float SPAWN_INTERVAL = 3f;
+        const float SPAWN_INTERVAL = 2f;
         const float MAX_SPAWN_DISTANCE = 2f;
         const int POOL_SIZE = 20;
 
