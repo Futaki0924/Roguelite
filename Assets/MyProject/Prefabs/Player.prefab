@@ -36,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 4840366651610220074}
   - {fileID: 259284960247652618}
+  - {fileID: 4874568906732480894}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4222152048475952358
@@ -162,6 +163,13 @@ MonoBehaviour:
   _laserLineRendrer: {fileID: 626308654508030565}
   _weaponId: 1
   _muzzleFlash: {fileID: 2141855003748312439}
+  _weaponName: {fileID: 0}
+  _ammoText: {fileID: 0}
+  _reloadUI: {fileID: 0}
+  _reloadCircleImage: {fileID: 0}
+  _expBar: {fileID: 0}
+  _levelUpText: {fileID: 0}
+  _levelUpEffect: {fileID: 443295900204590740}
 --- !u!1 &3244733176033089896
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,4 +378,71 @@ Transform:
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 1713238650648389728, guid: 42668445967e39740bd8394c041c5d56, type: 3}
   m_PrefabInstance: {fileID: 756535188482313495}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6859014177444768838
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2120172898269697830}
+    m_Modifications:
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890646756561576141, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+      propertyPath: m_Name
+      value: LevelUpEffect
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+--- !u!198 &443295900204590740 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6419593506106526418, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+  m_PrefabInstance: {fileID: 6859014177444768838}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4874568906732480894 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2059815831394747704, guid: 942cdb3726ff63741a974c1107b742a9, type: 3}
+  m_PrefabInstance: {fileID: 6859014177444768838}
   m_PrefabAsset: {fileID: 0}

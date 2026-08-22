@@ -22,6 +22,8 @@ namespace TPSRoguelite.InGame.Player
 
         const float ATTACK_RANGE = 50f;
 
+        const float LEVEL_UP_EFFECT_DURATION = 2f;
+
         [SerializeField] Rigidbody _rb;
 
         [SerializeField] Transform _weaponOrigin;
@@ -420,6 +422,11 @@ namespace TPSRoguelite.InGame.Player
         {
             CurrentExp += amount;
 
+            if(CurrentExp >= RequiredExp)
+            {
+                LevelUp();
+            }
+
             UpdateExpUI();
         }
 
@@ -429,6 +436,36 @@ namespace TPSRoguelite.InGame.Player
             {
                 _expBar.value = (float)CurrentExp / RequiredExp;
             }
+        }
+
+        private void LevelUp()
+        {
+            CurrentLevel++;
+
+            CurrentExp -= RequiredExp;
+
+            if(_levelUpEffect != null)
+            {
+                _levelUpEffect.Play();
+            }
+
+            ShowLevelUpTextAsync().Forget();
+        }
+
+        private async UniTaskVoid ShowLevelUpTextAsync()
+        {
+            if(_levelUpText == null)
+            {
+                return;
+            }
+
+            _levelUpText.enabled = true;
+            _levelUpText.SetText($"レベルアップ！\n<size=50%>Lv.{CurrentLevel}</size>");
+
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(LEVEL_UP_EFFECT_DURATION), cancellationToken: this.GetCancellationTokenOnDestroy());
+
+            _levelUpText.enabled = false;
         }
     }
 }
