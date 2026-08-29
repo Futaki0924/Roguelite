@@ -9,6 +9,7 @@ using TPSRoguelite.InGame.Enum;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using TPSRoguelite.InGame.Manager;
 
 namespace TPSRoguelite.InGame.Player
 {
@@ -64,6 +65,12 @@ namespace TPSRoguelite.InGame.Player
 
         CancellationTokenSource _fireCts;
 
+        float _moveSpeedBuf = 0f;
+        float _attackPowerBuf = 0f;
+        float _fireRateBuf = 0f;
+        float _reloadSpeedBuf = 0f;
+        int _maxAmmoBuf = 0;
+
         public Vector3 CurrentVelocity { get; private set; }
 
         public int CurrentAmmo { get; private set; }
@@ -73,6 +80,11 @@ namespace TPSRoguelite.InGame.Player
         public int CurrentLevel { get; private set; }
 
         int RequiredExp => CurrentLevel * 5;
+
+        int FinalAttackPower => _currentWeapon != null ? Mathf.RoundToInt(_currentWeapon.AttackPower * (1f + _attackPowerBuf)) : 0;
+        int FinalMaxAmmo => _currentWeapon != null ? _currentWeapon.MaxAmmo + _maxAmmoBuf : 0;
+        float FinalReloadTime => _currentWeapon != null ? _currentWeapon.ReloadTime * Mathf.Max(0.1f, 1f - _reloadSpeedBuf) : 0;
+        float FinalFireRate => _currentWeapon != null ? _currentWeapon.FireRate * Mathf.Max(0.1f, 1f - _fireRateBuf) : 0;
 
         private void Awake()
         {
@@ -93,6 +105,13 @@ namespace TPSRoguelite.InGame.Player
                 Debug.LogError("WeaponDataがありません。");
                 return;
             }
+
+            _moveSpeedBuf = 0f;
+            _attackPowerBuf = 0f;
+            _fireRateBuf = 0f;
+            _reloadSpeedBuf = 0f;
+            _maxAmmoBuf = 0;
+
 
             _inputActions = new PlayerInputActions();
             _inputActions.Player.Fire.performed += OnFire;
@@ -180,7 +199,8 @@ namespace TPSRoguelite.InGame.Player
 
             Vector3 moveDirection = (cameraForward * _moveInput.y + cameraRight * _moveInput.x).normalized;
 
-            Vector3 targetVelocity = moveDirection * MOVE_SPEED;
+            float finalMoveSpeed = MOVE_SPEED * (1f + _moveSpeedBuf);
+            Vector3 targetVelocity = moveDirection * finalMoveSpeed;
             _rb.linearVelocity = new Vector3(targetVelocity.x, _rb.linearVelocity.y, targetVelocity.z);
 
             CurrentVelocity = _rb.linearVelocity;
@@ -239,7 +259,7 @@ namespace TPSRoguelite.InGame.Player
             Debug.Log($"セミオートで撃った！残弾数: {CurrentAmmo}");
             Shoot();
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_currentWeapon.FireRate), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(FinalFireRate), cancellationToken: token);
 
             _canShoot = true;
         }
@@ -264,7 +284,7 @@ namespace TPSRoguelite.InGame.Player
                 await UniTask.Delay(TimeSpan.FromSeconds(_currentWeapon.FireInterval), cancellationToken: token);
             }
 
-            await UniTask.Delay(TimeSpan.FromSeconds(_currentWeapon.FireRate), cancellationToken: token);
+            await UniTask.Delay(TimeSpan.FromSeconds(FinalFireRate), cancellationToken: token);
             _canShoot = true;
         }
 
@@ -293,7 +313,7 @@ namespace TPSRoguelite.InGame.Player
                     break;
                 }
 
-                await UniTask.Delay(TimeSpan.FromSeconds(_currentWeapon.FireRate), cancellationToken: this.GetCancellationTokenOnDestroy());
+                await UniTask.Delay(TimeSpan.FromSeconds(FinalFireRate), cancellationToken: this.GetCancellationTokenOnDestroy());
 
                 _canShoot = true;
             }
@@ -316,14 +336,14 @@ namespace TPSRoguelite.InGame.Player
 
                 if (target != null)
                 {
-                    target.TakeDamage(_currentWeapon.AttackPower);
+                    target.TakeDamage(FinalAttackPower);
                 }
             }
         }
 
         private void OnReload(InputAction.CallbackContext context)
         {
-            if(_isReloading || CurrentAmmo == _currentWeapon.MaxAmmo)
+            if(_isReloading || CurrentAmmo == FinalMaxAmmo)
             {
                 return;
             }
@@ -345,7 +365,8 @@ namespace TPSRoguelite.InGame.Player
                 _reloadCircleImage.fillAmount = 0f;
             }
 
-            DOVirtual.Float(0f, 1f, _currentWeapon.ReloadTime, UpdateReloadUI).SetEase(Ease.Linear).OnComplete(FinishReload);
+            float finalReloadTime = _currentWeapon != null ? _currentWeapon.ReloadTime * Mathf.Max(0.1f, 1f - _reloadSpeedBuf) : 0f;
+            DOVirtual.Float(0f, 1f, finalReloadTime, UpdateReloadUI).SetEase(Ease.Linear).OnComplete(FinishReload);
         }
 
         private void DrawLaserPointer()
@@ -394,7 +415,7 @@ namespace TPSRoguelite.InGame.Player
         {
             if(_ammoText != null)
             {
-                _ammoText.SetText($"{CurrentAmmo}/{_currentWeapon.MaxAmmo}");
+                _ammoText.SetText($"{CurrentAmmo}/{FinalMaxAmmo}");
             }
         }
 
@@ -413,7 +434,7 @@ namespace TPSRoguelite.InGame.Player
                 _reloadUI.SetActive(false);
             }
 
-            CurrentAmmo = _currentWeapon.MaxAmmo;
+            CurrentAmmo = FinalMaxAmmo;
             UpdateCurrentAmmoUI();
             _isReloading = false;
         }
@@ -440,9 +461,9 @@ namespace TPSRoguelite.InGame.Player
 
         private void LevelUp()
         {
-            CurrentLevel++;
-
             CurrentExp -= RequiredExp;
+
+            CurrentLevel++;
 
             if(_levelUpEffect != null)
             {
@@ -466,6 +487,31 @@ namespace TPSRoguelite.InGame.Player
                 TimeSpan.FromSeconds(LEVEL_UP_EFFECT_DURATION), cancellationToken: this.GetCancellationTokenOnDestroy());
 
             _levelUpText.enabled = false;
+
+            LevelUpManager.Instance.OnLevelUp(_inputActions, this);
+        }
+
+        public void ApplySkill(SkillDataRecord skill)
+        {
+            switch ((SkillType)skill.SkillType)
+            {
+                case SkillType.MoveSpeedUp:
+                    _moveSpeedBuf += skill.Value;
+                    break;
+                case SkillType.AttackPowerUp:
+                    _attackPowerBuf += skill.Value;
+                    break;
+                case SkillType.FireRateUp:
+                    _fireRateBuf += skill.Value;
+                    break;
+                case SkillType.ReloadSpeedUp:
+                    _reloadSpeedBuf += skill.Value;
+                    break;
+                case SkillType.MaxAmmoUp:
+                    _maxAmmoBuf += (int)skill.Value;
+                    UpdateCurrentAmmoUI();
+                    break;
+            }
         }
     }
 }

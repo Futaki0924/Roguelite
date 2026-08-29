@@ -32,6 +32,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41d93f485f9305049add0868a50b17d4
+    m_Address: SkillData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SkillData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 545a75e6bf939a84dbf64f9b7d1f7006
     m_Address: Assets/Data/CSV/EnemyData.csv
     m_ReadOnly: 0

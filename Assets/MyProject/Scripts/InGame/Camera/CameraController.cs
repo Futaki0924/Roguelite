@@ -50,6 +50,11 @@ namespace TPSRoguelite.InGame.Camera
 
         private void Update()
         {
+            if(Time.timeScale == 0f)
+            {
+                return;
+            }
+
             _lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
 
             _currentYaw += _lookInput.x * _lookSensitivity;
