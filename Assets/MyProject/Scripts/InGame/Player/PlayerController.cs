@@ -132,7 +132,7 @@ namespace TPSRoguelite.InGame.Player
                 Debug.LogError("Main Cameraが見つかりませんでした");
             }
 
-            if(_reloadUI != null)
+            if (_reloadUI != null)
             {
                 _reloadUI.SetActive(false);
             }
@@ -141,7 +141,7 @@ namespace TPSRoguelite.InGame.Player
             CurrentLevel = 1;
             CurrentHP = MaxHP;
 
-            if(_levelUpText != null)
+            if (_levelUpText != null)
             {
                 _levelUpText.enabled = false;
             }
@@ -176,7 +176,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void OnMove()
         {
-            if (_rb == null  || _mainCameraTransform == null)
+            if (_rb == null || _mainCameraTransform == null)
             {
                 Debug.LogError("Rigidbodyがないよ！！");
                 return;
@@ -186,7 +186,7 @@ namespace TPSRoguelite.InGame.Player
             cameraForward.y = 0f;
             cameraForward.Normalize();
 
-            if(cameraForward != Vector3.zero)
+            if (cameraForward != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
                 _rb.rotation = Quaternion.Slerp(_rb.rotation, targetRotation, ROTATE_SPEED * Time.fixedDeltaTime);
@@ -217,7 +217,7 @@ namespace TPSRoguelite.InGame.Player
         {
             if (context.performed)
             {
-                if(!_canShoot || _isReloading || _currentWeapon == null)
+                if (!_canShoot || _isReloading || _currentWeapon == null)
                 {
                     return;
                 }
@@ -253,7 +253,7 @@ namespace TPSRoguelite.InGame.Player
 
         private async UniTaskVoid ShootSemiAutoAsync(CancellationToken token)
         {
-            if(CurrentAmmo == 0)
+            if (CurrentAmmo == 0)
             {
                 Reload();
                 return;
@@ -275,9 +275,9 @@ namespace TPSRoguelite.InGame.Player
         {
             _canShoot = false;
 
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if(CurrentAmmo <= 0)
+                if (CurrentAmmo <= 0)
                 {
                     Reload();
                     break;
@@ -301,7 +301,7 @@ namespace TPSRoguelite.InGame.Player
 
             while (!token.IsCancellationRequested)
             {
-                if(CurrentAmmo <= 0)
+                if (CurrentAmmo <= 0)
                 {
                     Reload();
                     break;
@@ -320,15 +320,16 @@ namespace TPSRoguelite.InGame.Player
                     break;
                 }
 
-                await UniTask.Delay(TimeSpan.FromSeconds(FinalFireRate), cancellationToken: this.GetCancellationTokenOnDestroy());
-
-                _canShoot = true;
             }
+
+            await UniTask.Delay(TimeSpan.FromSeconds(FinalFireRate), cancellationToken: this.GetCancellationTokenOnDestroy());
+
+            _canShoot = true;
         }
 
         private void Shoot()
         {
-            if(_muzzleFlash != null)
+            if (_muzzleFlash != null)
             {
                 _muzzleFlash.Play();
             }
@@ -350,7 +351,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void OnReload(InputAction.CallbackContext context)
         {
-            if(_isReloading || CurrentAmmo == FinalMaxAmmo)
+            if (_isReloading || CurrentAmmo == FinalMaxAmmo)
             {
                 return;
             }
@@ -362,12 +363,12 @@ namespace TPSRoguelite.InGame.Player
         {
             _isReloading = true;
 
-            if(_reloadUI != null)
+            if (_reloadUI != null)
             {
                 _reloadUI.SetActive(true);
             }
 
-            if(_reloadCircleImage != null)
+            if (_reloadCircleImage != null)
             {
                 _reloadCircleImage.fillAmount = 0f;
             }
@@ -378,14 +379,14 @@ namespace TPSRoguelite.InGame.Player
 
         private void DrawLaserPointer()
         {
-            if(_laserLineRendrer == null || _weaponOrigin == null || _mainCameraTransform == null)
+            if (_laserLineRendrer == null || _weaponOrigin == null || _mainCameraTransform == null)
             {
                 return;
             }
 
             _laserLineRendrer.SetPosition(0, _weaponOrigin.position);
             Ray ray = new Ray(_mainCameraTransform.position, _mainCameraTransform.forward);
-            if(Physics.Raycast(ray, out RaycastHit hitInfo, LASER_MAX_DISTANCE))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, LASER_MAX_DISTANCE))
             {
                 _laserLineRendrer.SetPosition(1, hitInfo.point);
             }
@@ -397,7 +398,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void UpdateWeaponUI()
         {
-            if(_weaponName != null)
+            if (_weaponName != null)
             {
                 _weaponName.SetText(_currentWeapon.WeaponName);
 
@@ -420,7 +421,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void UpdateCurrentAmmoUI()
         {
-            if(_ammoText != null)
+            if (_ammoText != null)
             {
                 _ammoText.SetText($"{CurrentAmmo}/{FinalMaxAmmo}");
             }
@@ -428,7 +429,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void UpdateReloadUI(float value)
         {
-            if(_reloadCircleImage != null)
+            if (_reloadCircleImage != null)
             {
                 _reloadCircleImage.fillAmount = value;
             }
@@ -436,7 +437,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void FinishReload()
         {
-            if(_reloadUI != null)
+            if (_reloadUI != null)
             {
                 _reloadUI.SetActive(false);
             }
@@ -450,7 +451,7 @@ namespace TPSRoguelite.InGame.Player
         {
             CurrentExp += amount;
 
-            if(CurrentExp >= RequiredExp)
+            if (CurrentExp >= RequiredExp)
             {
                 LevelUp();
             }
@@ -460,7 +461,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void UpdateExpUI()
         {
-            if(_expBar != null)
+            if (_expBar != null)
             {
                 _expBar.value = (float)CurrentExp / RequiredExp;
             }
@@ -472,7 +473,7 @@ namespace TPSRoguelite.InGame.Player
 
             CurrentLevel++;
 
-            if(_levelUpEffect != null)
+            if (_levelUpEffect != null)
             {
                 _levelUpEffect.Play();
             }
@@ -482,7 +483,7 @@ namespace TPSRoguelite.InGame.Player
 
         private async UniTaskVoid ShowLevelUpTextAsync()
         {
-            if(_levelUpText == null)
+            if (_levelUpText == null)
             {
                 return;
             }
@@ -523,7 +524,7 @@ namespace TPSRoguelite.InGame.Player
 
         private void UpdateHPBar()
         {
-            if(_hpBar != null)
+            if (_hpBar != null)
             {
                 _hpBar.value = (float)CurrentHP / MaxHP;
             }
@@ -533,7 +534,7 @@ namespace TPSRoguelite.InGame.Player
         {
             gameObject.SetActive(false);
 
-            if(GameManager.Instance != null)
+            if (GameManager.Instance != null)
             {
                 GameManager.Instance.GameOver();
             }
@@ -541,7 +542,7 @@ namespace TPSRoguelite.InGame.Player
 
         public void TakeDamage(int damageAmount)
         {
-            if(damageAmount <= 0 || CurrentHP <= 0)
+            if (damageAmount <= 0 || CurrentHP <= 0)
             {
                 return;
             }
@@ -549,7 +550,7 @@ namespace TPSRoguelite.InGame.Player
             CurrentHP -= damageAmount;
             UpdateHPBar();
 
-            if(CurrentHP <= 0)
+            if (CurrentHP <= 0)
             {
                 Die();
             }
