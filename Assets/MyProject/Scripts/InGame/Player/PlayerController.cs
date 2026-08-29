@@ -13,7 +13,7 @@ using TPSRoguelite.InGame.Manager;
 
 namespace TPSRoguelite.InGame.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IDamageable
     {
         const float MOVE_SPEED = 8f;
 
@@ -49,6 +49,8 @@ namespace TPSRoguelite.InGame.Player
 
         [SerializeField] ParticleSystem _levelUpEffect;
 
+        [SerializeField] Slider _hpBar;
+
         WeaponDataRecord _currentWeapon;
 
         Vector3 _moveDirection;
@@ -78,6 +80,9 @@ namespace TPSRoguelite.InGame.Player
         public int CurrentExp { get; private set; }
 
         public int CurrentLevel { get; private set; }
+
+        public int MaxHP { get; private set; } = 100;
+        public int CurrentHP { get; private set; } = 100;
 
         int RequiredExp => CurrentLevel * 5;
 
@@ -134,12 +139,14 @@ namespace TPSRoguelite.InGame.Player
 
             CurrentExp = 0;
             CurrentLevel = 1;
+            CurrentHP = MaxHP;
 
             if(_levelUpText != null)
             {
                 _levelUpText.enabled = false;
             }
 
+            UpdateHPBar();
             UpdateExpUI();
 
             gameObject.SetActive(true);
@@ -511,6 +518,40 @@ namespace TPSRoguelite.InGame.Player
                     _maxAmmoBuf += (int)skill.Value;
                     UpdateCurrentAmmoUI();
                     break;
+            }
+        }
+
+        private void UpdateHPBar()
+        {
+            if(_hpBar != null)
+            {
+                _hpBar.value = (float)CurrentHP / MaxHP;
+            }
+        }
+
+        private void Die()
+        {
+            gameObject.SetActive(false);
+
+            if(GameManager.Instance != null)
+            {
+                GameManager.Instance.GameOver();
+            }
+        }
+
+        public void TakeDamage(int damageAmount)
+        {
+            if(damageAmount <= 0 || CurrentHP <= 0)
+            {
+                return;
+            }
+
+            CurrentHP -= damageAmount;
+            UpdateHPBar();
+
+            if(CurrentHP <= 0)
+            {
+                Die();
             }
         }
     }
