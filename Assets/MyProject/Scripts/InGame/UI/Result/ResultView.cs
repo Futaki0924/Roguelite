@@ -25,7 +25,7 @@ namespace TPSRoguelite.UI
 
             if(_returnToTitleButton != null)
             {
-                _returnToTitleButton.onClick.AddListener(() => OnReturnToTitleAction.Invoke());
+                _returnToTitleButton.onClick.AddListener(() => OnReturnToTitleAction?.Invoke());
             }
         }
 

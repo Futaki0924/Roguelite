@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
 using TPSRoguelite.InGame.Manager;
+using Core.Manager;
 
 namespace TPSRoguelite.InGame.Player
 {
@@ -50,6 +51,8 @@ namespace TPSRoguelite.InGame.Player
         [SerializeField] ParticleSystem _levelUpEffect;
 
         [SerializeField] Slider _hpBar;
+
+        [SerializeField] AudioClip _fireSE;
 
         WeaponDataRecord _currentWeapon;
 
@@ -332,6 +335,11 @@ namespace TPSRoguelite.InGame.Player
             if (_muzzleFlash != null)
             {
                 _muzzleFlash.Play();
+            }
+
+            if(_fireSE != null)
+            {
+                SoundManager.Instance.PlaySE(_fireSE);
             }
 
             Ray ray = new Ray(_mainCameraTransform.position, _mainCameraTransform.forward);

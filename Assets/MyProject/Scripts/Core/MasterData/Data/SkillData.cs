@@ -14,7 +14,7 @@ namespace Core.MasterData
         [field: SerializeField] public float Value { get; private set; }
     }
     
-    [CreateAssetMenu(fileName = "SkillData", menuName = "ScriptableObject")]
+    [CreateAssetMenu(fileName = "NewSkillData", menuName = "Scriptable Objects/SkillData")]
     public class SkillData : ScriptableObject, IMasterDataContainer<SkillDataRecord>
     {
         [field: SerializeField] public List<SkillDataRecord> Records { get; private set; }

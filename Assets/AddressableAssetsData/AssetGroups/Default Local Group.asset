@@ -21,6 +21,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - EnemyData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2873539b19c523f4e9a8b2e9d8e30713
+    m_Address: Assets/Data/CSV/SkillData.csv
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ac1ca7bc63f1ea44a8d8c050696a8a8
     m_Address: WeaponData
     m_ReadOnly: 0
@@ -38,7 +43,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - SkillData
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 545a75e6bf939a84dbf64f9b7d1f7006
+  - m_GUID: fc4936e13df2bd94e82ce772e9471dd2
     m_Address: Assets/Data/CSV/EnemyData.csv
     m_ReadOnly: 0
     m_SerializedLabels: []

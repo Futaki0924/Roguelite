@@ -85,7 +85,7 @@ namespace TPSRoguelite.InGame.Spawner
             {
                 Debug.LogWarning("プールに空きがなかったため、Instantiateで生成します。プールのサイズを増やすか、生成に制限をかけてください");
                 GameObject enemyObj = Instantiate(_enemyPrefab);
-                enemy = GetComponent<EnemyState>();
+                enemy = enemyObj.GetComponent<EnemyState>();
                 if(enemy == null)
                 {
                     Debug.LogError("EnemyStateの取得に失敗しました");

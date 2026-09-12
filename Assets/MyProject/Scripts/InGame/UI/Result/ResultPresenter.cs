@@ -9,7 +9,7 @@ namespace TPSRoguelite.UI
         const string TITLE_SCENE_NAME = "TitleScene";
         const string IN_GAME_SCENE_NAME = "InGameScene";
 
-        [SerializeField] private ResultView _resultView;
+        [SerializeField] ResultView _resultView;
         ResultModel _resultModel;
 
         private void Start()
